@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --color-wa-green: #00a884;
+  --color-wa-green-light: #1DAA61;
+  --color-wa-green-success: #21C063;
+  --color-wa-green-dark: #0b846d;
+  --color-wa-bubble-sent-light: #d9fdd3;
+  --color-wa-bubble-sent-dark: #005c4b;
+  --font-wa: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  :root {
+    --bg-app: #f7f5f3;
+    --bg-panel: #ffffff;
+    --bg-panel-secondary: #f0f2f5;
+    --bg-search: #f0f2f5;
+    --bg-hover: #f5f6f6;
+    --bg-selected: #f0f2f5;
+    --border-subtle: #e9edef;
+    
+    --text-primary: #111b21;
+    --text-secondary: #667781;
+    --text-tertiary: #8696a0;
+    --text-inverse: #ffffff;
+
+    --bg-conversation: #efeae2;
+    --bg-chat-tile: url("https://static.whatsapp.net/rsrc.php/v3/yO/r/FsWUvqOtDpo.png");
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-app: #0a1014;
+      --bg-panel: #111b21;
+      --bg-panel-secondary: #202c33;
+      --bg-search: #202c33;
+      --bg-hover: #202c33;
+      --bg-selected: #2a3942;
+      --border-subtle: #233138;
+      
+      --text-primary: #e9edef;
+      --text-secondary: #8696a0;
+      --text-tertiary: #667781;
+
+      --bg-conversation: #0b141a;
+      --bg-chat-tile: url("https://static.whatsapp.net/rsrc.php/v3/yl/r/gi_DckOUM5a.png");
+    }
+  }
+
+  body {
+    @apply bg-[var(--bg-app)] text-[var(--text-primary)] font-wa;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+}
