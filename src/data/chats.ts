@@ -1,4 +1,5 @@
 import { Chat } from '../types';
+import { publicAsset } from '../utils/publicAsset';
 
 export const mockChats: Chat[] = [
   {
@@ -12,7 +13,7 @@ export const mockChats: Chat[] = [
     isFavorite: true,
     hasCatchUp: true,
     catchUpStatus: 'ready',
-    avatarUrl: '/avatars/ellie.svg',
+    avatarUrl: publicAsset('avatars/ellie.svg'),
   },
   {
     id: 'chat-2',
@@ -25,7 +26,7 @@ export const mockChats: Chat[] = [
     isFavorite: true,
     hasCatchUp: true,
     catchUpStatus: 'ready',
-    avatarUrl: 'https://i.pravatar.cc/150?u=eddie',
+    avatarUrl: publicAsset('avatars/eddie.svg'),
   },
   {
     id: 'chat-3',

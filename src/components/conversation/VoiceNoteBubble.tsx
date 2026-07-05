@@ -2,6 +2,7 @@ import React from 'react';
 import { VoiceNote, AppState } from '../../types';
 import clsx from 'clsx';
 import { Play, Pause } from 'lucide-react';
+import { publicAsset } from '../../utils/publicAsset';
 
 
 interface VoiceNoteBubbleProps {
@@ -21,8 +22,9 @@ const formatDuration = (seconds: number) => {
 };
 
 const getVoiceNoteAvatarUrl = (senderId: string) => {
-  if (senderId === 'ellie') return '/avatars/ellie.svg';
-  return `https://i.pravatar.cc/150?u=${senderId}`;
+  if (senderId === 'ellie') return publicAsset('avatars/ellie.svg');
+  if (senderId === 'eddie') return publicAsset('avatars/eddie.svg');
+  return publicAsset('avatars/me.svg');
 };
 
 const VoiceNoteBubble: React.FC<VoiceNoteBubbleProps> = ({ appState, setAppState, voiceNote, isFirst, isLast, showAvatar, accumulatedStartSeconds }) => {

@@ -1,4 +1,5 @@
 import { Message, VoiceNote } from '../types';
+import { publicAsset } from '../utils/publicAsset';
 
 export const mockMessages: Message[] = [
   { id: 'msg-1', chatId: 'chat-1', senderId: 'me', senderName: 'Me', direction: 'outgoing', type: 'text', text: 'Hey Ellie, any updates on the wedding planning?', sentAt: '10:00 AM' },
@@ -13,13 +14,13 @@ export const mockMessages: Message[] = [
 
 export const mockVoiceNotes: VoiceNote[] = [
   // Ellie (chat-1) - 7 VNs, 1080s total
-  { id: 'vn-1', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: '/audio/ellie-vn-1.wav', sentAt: '10:42 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
-  { id: 'vn-2', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: '/audio/ellie-vn-2.wav', sentAt: '10:44 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
-  { id: 'vn-3', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: '/audio/ellie-vn-3.wav', sentAt: '10:47 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
-  { id: 'vn-4', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: '/audio/ellie-vn-4.wav', sentAt: '10:50 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
-  { id: 'vn-5', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: '/audio/ellie-vn-5.wav', sentAt: '10:53 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
-  { id: 'vn-6', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: '/audio/ellie-vn-6.wav', sentAt: '10:56 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
-  { id: 'vn-7', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 180, audioUrl: '/audio/ellie-vn-7.wav', sentAt: '10:59 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
+  { id: 'vn-1', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: publicAsset('audio/ellie-vn-1.wav'), sentAt: '10:42 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
+  { id: 'vn-2', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: publicAsset('audio/ellie-vn-2.wav'), sentAt: '10:44 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
+  { id: 'vn-3', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: publicAsset('audio/ellie-vn-3.wav'), sentAt: '10:47 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
+  { id: 'vn-4', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: publicAsset('audio/ellie-vn-4.wav'), sentAt: '10:50 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
+  { id: 'vn-5', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: publicAsset('audio/ellie-vn-5.wav'), sentAt: '10:53 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
+  { id: 'vn-6', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 150, audioUrl: publicAsset('audio/ellie-vn-6.wav'), sentAt: '10:56 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
+  { id: 'vn-7', chatId: 'chat-1', senderId: 'ellie', senderName: 'Ellie', direction: 'incoming', durationSeconds: 180, audioUrl: publicAsset('audio/ellie-vn-7.wav'), sentAt: '10:59 AM', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-1' },
 
   // Eddie (chat-2) - 3 VNs, 300s total
   { id: 'vn-8', chatId: 'chat-2', senderId: 'eddie', senderName: 'Eddie', direction: 'incoming', durationSeconds: 100, sentAt: 'Yesterday', waveform: Array.from({ length: 40 }, () => Math.random() * 80 + 20), isPlayed: false, playbackProgressSeconds: 0, clusterId: 'cluster-2' },
