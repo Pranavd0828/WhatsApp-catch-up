@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WhatsApp Catch-Up Product Sense Flow Map</title>
+  <style>
+    :root {
+      --bg: #f0f2f5;
+      --panel: #ffffff;
+      --panel-2: #f7f8fa;
+      --ink: #111b21;
+      --muted: #667781;
+      --line: #c9d3d8;
+      --green: #00a884;
+      --green-dark: #008069;
+      --amber: #b7791f;
+      --red: #c2410c;
+      --blue: #2563eb;
+      --shadow: 0 14px 40px rgba(17, 27, 33, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      background: #111b21;
+      color: #fff;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 4px solid var(--green);
+    }
+
+    .title-block {
+      display: grid;
+      gap: 4px;
+    }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0;
+      font-weight: 650;
+    }
+
+    .title-block p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 14px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tool-button {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+
+    .tool-button[aria-pressed="true"] {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 18px;
+      padding: 18px;
+      min-height: 0;
+    }
+
+    .map-shell,
+    .detail-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      min-height: 0;
+    }
+
+    .map-shell {
+      overflow: auto;
+      padding: 18px;
+    }
+
+    .problem-row {
+      display: grid;
+      grid-template-columns: minmax(420px, 1fr);
+      gap: 10px;
+      min-width: 1180px;
+      margin-bottom: 14px;
+    }
+
+    .map {
+      min-width: 1180px;
+      display: grid;
+      grid-template-columns: 170px 34px 190px 34px 190px 34px 180px 34px 185px 34px 185px;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .section {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 8px;
+    }
+
+    .section-label {
+      background: #dfe5e7;
+      border: 1px solid #b8c4ca;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #26343a;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .stack {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .node {
+      position: relative;
+      width: 100%;
+      min-height: 66px;
+      border: 2px solid #c8d3d8;
+      background: var(--panel-2);
+      color: var(--ink);
+      padding: 10px;
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      gap: 5px;
+      transition: border-color 140ms ease, background 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+    }
+
+    .node strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.2;
+    }
+
+    .node span {
+      display: block;
+      font-size: 12px;
+      line-height: 1.25;
+      color: var(--muted);
+    }
+
+    .node:hover,
+    .node:focus-visible,
+    .node.active {
+      outline: none;
+      border-color: var(--green);
+      background: #e8fff7;
+      box-shadow: 0 0 0 3px rgba(0, 168, 132, 0.16);
+      transform: translateY(-1px);
+    }
+
+    .node.problem {
+      background: #fff8e8;
+      border-color: #d6a84b;
+    }
+
+    .node.core {
+      background: #e8fff7;
+      border-color: var(--green);
+    }
+
+    .node.ai {
+      background: #eff6ff;
+      border-color: #93c5fd;
+    }
+
+    .node.metric {
+      background: #f7fee7;
+      border-color: #bef264;
+    }
+
+    .node.risk {
+      background: #fff1f2;
+      border-color: #fda4af;
+    }
+
+    .node.dimmed {
+      opacity: 0.24;
+    }
+
+    .arrow-col {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 8px;
+    }
+
+    .arrow-head-space {
+      min-height: 34px;
+    }
+
+    .arrows {
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      padding-top: 15px;
+    }
+
+    .arrow {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green-dark);
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .flow-row {
+      margin-top: 18px;
+      min-width: 1180px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .flow-title {
+      background: #dfe5e7;
+      border: 1px solid #b8c4ca;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .flow-chain {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 34px;
+    }
+
+    .flow-step:last-child {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .flow-step .node {
+      min-height: 86px;
+    }
+
+    .detail-panel {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      overflow: hidden;
+    }
+
+    .detail-head {
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background: #f7f8fa;
+    }
+
+    .detail-head h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .detail-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .detail-body {
+      padding: 18px;
+      overflow: auto;
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+
+    .detail-box {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 12px;
+    }
+
+    .detail-box h3 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--green-dark);
+    }
+
+    .detail-box p,
+    .detail-box li {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.45;
+      color: #26343a;
+    }
+
+    .detail-box ul {
+      margin: 0;
+      padding-left: 18px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .legend-item {
+      border: 1px solid var(--line);
+      padding: 8px;
+      font-size: 12px;
+      background: #fff;
+    }
+
+    .legend-item b {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 980px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-panel {
+        min-height: 420px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        background: var(--panel);
+      }
+
+      .app {
+        display: block;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px 14px 12px;
+      }
+
+      .title-block h1 {
+        font-size: 18px;
+        line-height: 1.2;
+      }
+
+      .title-block p {
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .toolbar {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 2px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .tool-button {
+        flex: 0 0 auto;
+        padding: 7px 9px;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+
+      .workspace {
+        display: block;
+        padding: 0;
+      }
+
+      .map-shell,
+      .detail-panel {
+        border-left: 0;
+        border-right: 0;
+        box-shadow: none;
+      }
+
+      .map-shell {
+        overflow: visible;
+        padding: 12px;
+      }
+
+      .problem-row,
+      .map,
+      .flow-row {
+        min-width: 0;
+      }
+
+      .problem-row {
+        grid-template-columns: 1fr;
+        margin-bottom: 12px;
+      }
+
+      .map {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .section {
+        gap: 6px;
+      }
+
+      .section-label,
+      .flow-title {
+        position: sticky;
+        top: 116px;
+        z-index: 2;
+        padding: 7px 9px;
+        font-size: 11px;
+      }
+
+      .stack {
+        gap: 7px;
+      }
+
+      .node {
+        min-height: 0;
+        padding: 10px;
+      }
+
+      .node strong {
+        font-size: 13px;
+      }
+
+      .node span {
+        font-size: 12px;
+      }
+
+      .arrow-col {
+        display: flex;
+        justify-content: center;
+        min-height: 28px;
+      }
+
+      body.is-filtered .arrow-col {
+        display: none;
+      }
+
+      .arrow-head-space {
+        display: none;
+      }
+
+      .arrows {
+        display: block;
+        padding: 0;
+      }
+
+      .arrows .arrow:not(:first-child) {
+        display: none;
+      }
+
+      .arrow {
+        min-height: 28px;
+        font-size: 0;
+        line-height: 1;
+      }
+
+      .arrow::before {
+        content: "↓";
+        color: var(--green-dark);
+        font-size: 22px;
+        font-weight: 800;
+      }
+
+      .flow-row {
+        margin-top: 14px;
+        gap: 8px;
+      }
+
+      .flow-chain {
+        grid-template-columns: 1fr;
+        gap: 7px;
+      }
+
+      .flow-step,
+      .flow-step:last-child {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+
+      .flow-step .node {
+        min-height: 0;
+      }
+
+      .flow-step .arrow {
+        justify-self: center;
+      }
+
+      .node.dimmed {
+        display: none;
+      }
+
+      .section:not(:has(.stack .node:not(.dimmed))) {
+        display: none;
+      }
+
+      .flow-step:has(.node.dimmed) {
+        display: none;
+      }
+
+      .flow-row:not(:has(.node:not(.dimmed))) {
+        display: none;
+      }
+
+      .detail-panel {
+        min-height: 0;
+      }
+
+      .detail-head,
+      .detail-body {
+        padding: 14px;
+      }
+
+      .detail-head h2 {
+        font-size: 17px;
+      }
+
+      .detail-body {
+        gap: 10px;
+      }
+
+      .legend {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .topbar {
+        padding-inline: 10px;
+      }
+
+      .map-shell {
+        padding: 10px;
+      }
+
+      .title-block h1 {
+        font-size: 17px;
+      }
+
+      .section-label,
+      .flow-title {
+        top: 124px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="title-block">
+        <h1>WhatsApp Catch-Up Product Sense Flow Map</h1>
+        <p>Rectangular boxes and directional arrows mapping users, problems, feature logic, metrics, and risks.</p>
+      </div>
+      <div class="toolbar" aria-label="Map controls">
+        <button class="tool-button" data-filter="all" aria-pressed="true">All</button>
+        <button class="tool-button" data-filter="pain">Pain → Solution</button>
+        <button class="tool-button" data-filter="flow">Primary Flow</button>
+        <button class="tool-button" data-filter="ai">AI Logic</button>
+        <button class="tool-button" data-filter="trust">Trust</button>
+        <button class="tool-button" data-filter="metrics">Metrics</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="map-shell" aria-label="Product sense flow map">
+        <div class="problem-row">
+          <button class="node problem" data-id="core-problem" data-tags="all pain flow">
+            <strong>Core User Problem</strong>
+            <span>Users receive long voice notes and miss important decisions, questions, and action items.</span>
+          </button>
+        </div>
+
+        <div class="map">
+          <div class="section">
+            <div class="section-label">User Segments</div>
+            <div class="stack">
+              <button class="node" data-id="busy-professionals" data-tags="all pain"><strong>Busy Professionals</strong><span>Need fast triage between meetings and deadlines.</span></button>
+              <button class="node" data-id="wedding-planners" data-tags="all pain"><strong>Wedding Planners</strong><span>Coordinate vendors, family, payments, RSVPs, and decisions.</span></button>
+              <button class="node" data-id="family-coordinators" data-tags="all pain"><strong>Family Coordinators</strong><span>Track travel, pickup, hotel, and care logistics.</span></button>
+              <button class="node" data-id="students" data-tags="all pain"><strong>Students</strong><span>Catch up on group projects, class notes, and deadlines.</span></button>
+              <button class="node" data-id="group-chat-heavy" data-tags="all pain"><strong>Group-Chat-Heavy Users</strong><span>Need signal from noisy multi-person voice-note threads.</span></button>
+            </div>
+          </div>
+
+          <div class="arrow-col"><div class="arrow-head-space"></div><div class="arrows"><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div></div></div>
+
+          <div class="section">
+            <div class="section-label">Pain Points</div>
+            <div class="stack">
+              <button class="node problem" data-id="long-voice-notes" data-tags="all pain"><strong>Long Voice Notes</strong><span>18-minute clusters are hard to listen through.</span></button>
+              <button class="node problem" data-id="hidden-asks" data-tags="all pain"><strong>Hidden Asks</strong><span>Questions are buried inside casual audio.</span></button>
+              <button class="node problem" data-id="scattered-decisions" data-tags="all pain"><strong>Scattered Decisions</strong><span>Payments, dates, approvals, and choices get lost.</span></button>
+              <button class="node problem" data-id="reply-friction" data-tags="all pain"><strong>Reply Friction</strong><span>User knows what to say but has to reconstruct context.</span></button>
+              <button class="node problem" data-id="trust-risk" data-tags="all trust"><strong>Trust Risk</strong><span>Audio is private and summary mistakes can cause harm.</span></button>
+            </div>
+          </div>
+
+          <div class="arrow-col"><div class="arrow-head-space"></div><div class="arrows"><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div></div></div>
+
+          <div class="section">
+            <div class="section-label">Jobs To Be Done</div>
+            <div class="stack">
+              <button class="node" data-id="skim-fast" data-tags="all pain"><strong>Skim Fast</strong><span>Know what happened without listening to every second.</span></button>
+              <button class="node" data-id="find-my-asks" data-tags="all pain"><strong>Find My Asks</strong><span>See exactly where someone needs input.</span></button>
+              <button class="node" data-id="capture-decisions" data-tags="all pain"><strong>Capture Decisions</strong><span>Turn audio into structured decisions and action items.</span></button>
+              <button class="node" data-id="reply-confidently" data-tags="all flow"><strong>Reply Confidently</strong><span>Draft a useful response without losing the chat context.</span></button>
+              <button class="node" data-id="stay-in-control" data-tags="all trust"><strong>Stay In Control</strong><span>Review, edit, consent, and override AI output.</span></button>
+            </div>
+          </div>
+
+          <div class="arrow-col"><div class="arrow-head-space"></div><div class="arrows"><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div></div></div>
+
+          <div class="section">
+            <div class="section-label">Core Feature</div>
+            <div class="stack">
+              <button class="node core" data-id="summary-card" data-tags="all pain flow"><strong>Inline Catch-Up Summary</strong><span>Long voice notes → concise summary and topics.</span></button>
+              <button class="node core" data-id="needs-input" data-tags="all pain flow"><strong>Needs Your Input</strong><span>Hidden asks → explicit questions needing response.</span></button>
+              <button class="node core" data-id="action-items" data-tags="all pain flow"><strong>Action Items</strong><span>Scattered decisions → checklist of things to do.</span></button>
+              <button class="node core" data-id="suggested-replies" data-tags="all flow ai"><strong>Suggested Replies</strong><span>Reply friction → editable draft responses.</span></button>
+              <button class="node core" data-id="global-inbox" data-tags="all flow"><strong>Global Catch-Up Inbox</strong><span>Multiple chats → one queue of voice-note follow-ups.</span></button>
+            </div>
+          </div>
+
+          <div class="arrow-col"><div class="arrow-head-space"></div><div class="arrows"><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div></div></div>
+
+          <div class="section">
+            <div class="section-label">AI Logic</div>
+            <div class="stack">
+              <button class="node ai" data-id="transcription" data-tags="all ai"><strong>Transcription</strong><span>Convert voice notes into searchable text segments.</span></button>
+              <button class="node ai" data-id="silence-skip" data-tags="all ai"><strong>Silence Skipping</strong><span>Remove greetings, pauses, and low-signal audio spans.</span></button>
+              <button class="node ai" data-id="topic-clustering" data-tags="all ai"><strong>Topic Clustering</strong><span>Group segments into venue, payment, RSVP, logistics, etc.</span></button>
+              <button class="node ai" data-id="extract-actions" data-tags="all ai"><strong>Action Extraction</strong><span>Detect commitments, decisions, owners, and deadlines.</span></button>
+              <button class="node ai" data-id="detect-questions" data-tags="all ai"><strong>Question Detection</strong><span>Identify asks directed at the user.</span></button>
+              <button class="node ai" data-id="draft-replies" data-tags="all ai flow"><strong>Suggested Reply Generation</strong><span>Create short, warm, detailed, or point-by-point drafts.</span></button>
+            </div>
+          </div>
+
+          <div class="arrow-col"><div class="arrow-head-space"></div><div class="arrows"><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div><div class="arrow">→</div></div></div>
+
+          <div class="section">
+            <div class="section-label">Metrics</div>
+            <div class="stack">
+              <button class="node metric" data-id="completion-rate" data-tags="all metrics"><strong>Voice Note Completion Rate</strong><span>More users finish or confidently skip long audio.</span></button>
+              <button class="node metric" data-id="time-saved" data-tags="all metrics"><strong>Time Saved</strong><span>Minutes avoided per voice-note cluster.</span></button>
+              <button class="node metric" data-id="response-rate" data-tags="all metrics"><strong>Action Item Response Rate</strong><span>Questions and decisions get answered faster.</span></button>
+              <button class="node metric" data-id="usage-rate" data-tags="all metrics"><strong>Catch-Up Usage Rate</strong><span>Users open summaries when voice notes are long or clustered.</span></button>
+              <button class="node metric" data-id="reply-conversion" data-tags="all metrics"><strong>Reply Conversion Rate</strong><span>Inserted AI drafts become sent replies.</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="flow-title">Primary User Flow</div>
+          <div class="flow-chain">
+            <div class="flow-step"><button class="node core" data-id="flow-open" data-tags="all flow"><strong>Open WhatsApp</strong><span>User enters normal chat surface.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node core" data-id="flow-select-chat" data-tags="all flow"><strong>Select Unread Voice Note Chat</strong><span>Ellie or another voice-heavy thread.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node core" data-id="flow-tap-catchup" data-tags="all flow"><strong>Tap Catch Up</strong><span>Open inline summary or global Catch-Up inbox.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node core" data-id="flow-review" data-tags="all flow"><strong>Review Summary</strong><span>See topics, decisions, transcript, and important parts.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node core" data-id="flow-answer" data-tags="all flow"><strong>Answer Questions</strong><span>Select asks and insert suggested reply.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node core" data-id="flow-done" data-tags="all flow metrics"><strong>Mark Items Done</strong><span>Sent reply updates answered state and reduces backlog.</span></button></div>
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="flow-title">Trust, Privacy, and Consent Requirements</div>
+          <div class="flow-chain">
+            <div class="flow-step"><button class="node" data-id="e2ee" data-tags="all trust"><strong>End-to-End Encryption</strong><span>Summaries must not weaken WhatsApp’s privacy promise.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node" data-id="on-device" data-tags="all trust ai"><strong>On-Device Where Possible</strong><span>Prefer local transcription and extraction for sensitive audio.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node" data-id="consent" data-tags="all trust"><strong>Clear User Consent</strong><span>User opts into summaries and understands AI limitations.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node" data-id="review" data-tags="all trust"><strong>Review Before Send</strong><span>Suggested replies are never auto-sent.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node" data-id="traceability" data-tags="all trust ai"><strong>Traceability</strong><span>Questions link back to transcript and voice-note segment.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node" data-id="disclaimer" data-tags="all trust"><strong>AI Disclaimer</strong><span>Summaries may be wrong; original audio remains available.</span></button></div>
+          </div>
+        </div>
+
+        <div class="flow-row">
+          <div class="flow-title">Tradeoffs and Risks</div>
+          <div class="flow-chain">
+            <div class="flow-step"><button class="node risk" data-id="accuracy-speed" data-tags="all metrics trust"><strong>Accuracy vs Speed</strong><span>Fast summaries are useful, but errors can mislead.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node risk" data-id="privacy-intelligence" data-tags="all trust ai"><strong>Privacy vs Intelligence</strong><span>Richer AI may require more context and stronger safeguards.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node risk" data-id="automation-control" data-tags="all trust flow"><strong>Automation vs User Control</strong><span>Drafts should help, not make decisions for the user.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node risk" data-id="false-positives" data-tags="all ai metrics"><strong>False Positives</strong><span>Action detection may invent tasks or over-prioritize casual comments.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node risk" data-id="tone-mismatch" data-tags="all flow"><strong>Tone Mismatch</strong><span>AI replies can sound colder, warmer, or more decisive than intended.</span></button><div class="arrow">→</div></div>
+            <div class="flow-step"><button class="node risk" data-id="over-notification" data-tags="all metrics"><strong>Over-Notification</strong><span>Too many Catch-Up prompts can become another inbox.</span></button></div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="detail-panel" aria-label="Selected item details">
+        <div class="detail-head">
+          <h2 id="detail-title">Core User Problem</h2>
+          <p id="detail-summary">Users receive long voice notes and miss important decisions, questions, and action items.</p>
+        </div>
+        <div class="detail-body">
+          <div class="detail-box">
+            <h3>Product Sense Read</h3>
+            <p id="detail-read">The feature wins if it makes long audio feel skimmable without breaking the user’s trust in WhatsApp’s private messaging model.</p>
+          </div>
+          <div class="detail-box">
+            <h3>Why It Matters</h3>
+            <ul id="detail-points">
+              <li>Voice notes are convenient for senders but expensive for receivers.</li>
+              <li>Important asks are often embedded in casual speech.</li>
+              <li>The prototype turns audio into reviewable, editable, and actionable structure.</li>
+            </ul>
+          </div>
+          <div class="detail-box">
+            <h3>Legend</h3>
+            <div class="legend">
+              <div class="legend-item"><b>Yellow</b>Problem or pain point</div>
+              <div class="legend-item"><b>Green</b>Core product feature or flow</div>
+              <div class="legend-item"><b>Blue</b>AI behavior or system logic</div>
+              <div class="legend-item"><b>Red</b>Risk or tradeoff</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    const details = {
+      "core-problem": {
+        title: "Core User Problem",
+        summary: "Users receive long voice notes and miss important decisions, questions, and action items.",
+        read: "The receiver bears the cost of long audio. Catch-Up reframes voice notes as skim-friendly, trustworthy, and actionable conversation objects.",
+        points: ["Audio is high-context but low-scan.", "The receiver needs confidence before replying.", "The feature should reduce cognitive load while preserving user control."]
+      },
+      "long-voice-notes": {
+        title: "Pain → Summary",
+        summary: "Long voice notes create time pressure and avoidance.",
+        read: "The inline summary is the first-order solution because it lets users decide whether to listen, skim, or respond.",
+        points: ["Summaries should appear only when length or clustering justifies them.", "The original audio remains accessible.", "The UI should feel native, not like a separate AI dashboard."]
+      },
+      "hidden-asks": {
+        title: "Pain → Needs Your Input",
+        summary: "Questions buried in audio are easy to miss.",
+        read: "The highest-value extraction is not a generic summary; it is identifying the exact asks that require the user’s response.",
+        points: ["Questions become discrete review items.", "Selecting a question opens reply assistance.", "Answered state closes the loop."]
+      },
+      "scattered-decisions": {
+        title: "Pain → Action Items",
+        summary: "Decisions, due dates, payments, and approvals get scattered across speech.",
+        read: "Action extraction turns unstructured conversation into a lightweight checklist without requiring users to manually transcribe.",
+        points: ["Extract owner, deadline, topic, and source segment when possible.", "Avoid overclaiming low-confidence tasks.", "Let users ignore or correct extracted items."]
+      },
+      "summary-card": {
+        title: "Inline Catch-Up Summary",
+        summary: "Long voice notes map to a concise summary and topic list.",
+        read: "The inline card is the hero moment. It should feel like part of WhatsApp’s message surface, not a foreign AI feature.",
+        points: ["Show topic clusters, key questions, and decisions.", "Open the detail panel on click.", "Keep visual styling subtle and native."]
+      },
+      "needs-input": {
+        title: "Needs Your Input",
+        summary: "Hidden asks become explicit questions.",
+        read: "This section creates actionability. It is where the product moves from passive summarization to helping users finish communication work.",
+        points: ["Highlight user-directed questions.", "Support selecting multiple questions.", "Mark answered after a reply is sent."]
+      },
+      "suggested-replies": {
+        title: "Suggested Replies",
+        summary: "AI drafts responses from selected questions.",
+        read: "Reply generation should be assistance, not automation. The user must stay in the composer loop and edit before sending.",
+        points: ["Support short, warm, detailed, and point-by-point modes.", "Never auto-send.", "Preserve tone and relationship context."]
+      },
+      "global-inbox": {
+        title: "Global Catch-Up Inbox",
+        summary: "Multiple chats become one backlog of voice-note follow-ups.",
+        read: "The inbox helps users prioritize across conversations when voice notes pile up, especially for group-chat-heavy users.",
+        points: ["Aggregate pending catch-ups.", "Expose duration and question count.", "Avoid creating another noisy inbox."]
+      },
+      "transcription": {
+        title: "AI Logic: Transcription",
+        summary: "Voice notes become text segments with timestamps.",
+        read: "Transcription is the foundation for every downstream feature: topics, questions, action items, transcript search, and traceability.",
+        points: ["Store timestamps for source linking.", "Handle accents, background noise, and multi-speaker audio.", "Prefer privacy-preserving processing."]
+      },
+      "silence-skip": {
+        title: "AI Logic: Silence Skipping",
+        summary: "Low-signal audio is skipped or compressed.",
+        read: "Skipping greetings and silence helps users quickly reach the important parts without losing access to the full recording.",
+        points: ["Detect pauses and filler spans.", "Let users toggle the behavior.", "Avoid accidentally hiding meaningful context."]
+      },
+      "topic-clustering": {
+        title: "AI Logic: Topic Clustering",
+        summary: "Segments are grouped into meaningful topics.",
+        read: "Topic clustering helps convert a rambling voice note into a navigable structure: venue, florist quote, RSVP, payment, travel, work update.",
+        points: ["Cluster by semantic topic, not just timestamps.", "Support skim and jump navigation.", "Show confidence only if useful to users."]
+      },
+      "extract-actions": {
+        title: "AI Logic: Action Extraction",
+        summary: "The model detects decisions, owners, deadlines, and tasks.",
+        read: "Action extraction is high impact but riskier than summarization, so the UI should keep source traceability and allow dismissal.",
+        points: ["Extract commitments and deadlines.", "Distinguish decisions from suggestions.", "Avoid false positives in casual speech."]
+      },
+      "detect-questions": {
+        title: "AI Logic: Question Detection",
+        summary: "The model identifies asks directed at the user.",
+        read: "Question detection powers Needs Your Input and reply helper flows. It should prioritize direct asks over rhetorical questions.",
+        points: ["Classify direct vs indirect asks.", "Link back to transcript/audio source.", "Require review before marking answered."]
+      },
+      "draft-replies": {
+        title: "AI Logic: Suggested Replies",
+        summary: "The model drafts editable responses from selected questions.",
+        read: "Generated replies should reduce blank-page friction while leaving final wording and consent with the user.",
+        points: ["Use selected questions as grounding.", "Offer tone modes.", "Insert into composer instead of sending."]
+      },
+      "e2ee": {
+        title: "Trust: End-to-End Encryption",
+        summary: "Catch-Up cannot undermine WhatsApp’s core privacy promise.",
+        read: "The product should be designed around encrypted messaging expectations, with minimal exposure and clear boundaries.",
+        points: ["Do not weaken E2EE.", "Avoid server-side processing unless explicitly consented and privacy-safe.", "Make privacy posture visible in product copy."]
+      },
+      "on-device": {
+        title: "Trust: On-Device Where Possible",
+        summary: "Process sensitive audio locally whenever feasible.",
+        read: "On-device AI improves privacy but may constrain model quality, latency, battery, and language support.",
+        points: ["Prefer local transcription/extraction for private chats.", "Fallbacks need explicit consent.", "Balance device constraints with quality."]
+      },
+      "consent": {
+        title: "Trust: Clear Consent",
+        summary: "Users understand when summaries are generated and how AI is used.",
+        read: "Consent protects user trust and prevents AI from feeling silently inserted into intimate conversations.",
+        points: ["Make AI state explicit.", "Let users disable summaries.", "Show disclaimers without overwhelming the UI."]
+      },
+      "completion-rate": {
+        title: "Metric: Voice Note Completion Rate",
+        summary: "Tracks whether users finish, skim, or confidently act on voice notes.",
+        read: "Completion should include successful catch-up behavior, not only full audio playback.",
+        points: ["Measure full listens and summary-assisted completion.", "Segment by duration and cluster size.", "Avoid optimizing for forced listening."]
+      },
+      "time-saved": {
+        title: "Metric: Time Saved",
+        summary: "Minutes avoided per voice-note cluster.",
+        read: "The clearest value proposition is reducing the receiver’s time burden while preserving comprehension.",
+        points: ["Estimate audio duration minus active review time.", "Measure by scenario type.", "Use self-reported confidence as a guardrail."]
+      },
+      "response-rate": {
+        title: "Metric: Action Item Response Rate",
+        summary: "How often detected questions and actions get answered.",
+        read: "This captures whether Catch-Up improves communication outcomes, not just feature engagement.",
+        points: ["Track selected questions.", "Track sent replies after insert.", "Measure time-to-response."]
+      },
+      "usage-rate": {
+        title: "Metric: Catch-Up Usage Rate",
+        summary: "How often users open Catch-Up when eligible.",
+        read: "Usage should be evaluated only for moments where the feature is contextually valuable: long notes, clusters, or unread backlog.",
+        points: ["Avoid denominator pollution from short notes.", "Track inline card opens and global inbox opens.", "Watch repeat usage."]
+      },
+      "reply-conversion": {
+        title: "Metric: Reply Conversion Rate",
+        summary: "Inserted AI drafts that become sent replies.",
+        read: "Reply conversion validates that suggested responses are useful enough to move from assistance to action.",
+        points: ["Track insert to send.", "Track edit distance before send.", "Watch for deletions and tone mismatch."]
+      },
+      "accuracy-speed": {
+        title: "Tradeoff: Accuracy vs Speed",
+        summary: "Faster summaries feel magical, but wrong summaries can cause bad decisions.",
+        read: "Use confidence thresholds and source links to protect users from over-trusting fast AI output.",
+        points: ["Low confidence should degrade gracefully.", "Source traceability matters.", "Do not hide uncertainty when stakes are high."]
+      },
+      "privacy-intelligence": {
+        title: "Tradeoff: Privacy vs Intelligence",
+        summary: "More context can improve quality but increases sensitivity.",
+        read: "The system should default to privacy-preserving processing and ask for consent before using broader context.",
+        points: ["Limit context scope.", "Prefer on-device processing.", "Explain what data is used."]
+      },
+      "automation-control": {
+        title: "Tradeoff: Automation vs User Control",
+        summary: "Automation can save time but may overstep in personal communication.",
+        read: "Catch-Up should help users decide and respond, not decide or send on their behalf.",
+        points: ["No auto-send.", "Editable drafts only.", "Clear answered state changes."]
+      },
+      "false-positives": {
+        title: "Risk: False Positives",
+        summary: "The model may invent action items from casual comments.",
+        read: "False positives erode trust quickly, so the product should prefer precision for actions and questions.",
+        points: ["Use thresholds.", "Let users dismiss.", "Link every item to source evidence."]
+      }
+    };
+
+    const defaultDetail = {
+      read: "This node contributes to the core product loop: make long audio skimmable, actionable, private, and easy to respond to.",
+      points: ["Keep the interface native to WhatsApp.", "Preserve user review and control.", "Tie product value to real communication outcomes."]
+    };
+
+    const nodes = Array.from(document.querySelectorAll(".node"));
+    const title = document.getElementById("detail-title");
+    const summary = document.getElementById("detail-summary");
+    const read = document.getElementById("detail-read");
+    const points = document.getElementById("detail-points");
+
+    function showDetail(node) {
+      const id = node.dataset.id;
+      const info = details[id] || {
+        title: node.querySelector("strong")?.textContent || "Product Node",
+        summary: node.querySelector("span")?.textContent || "",
+        ...defaultDetail
+      };
+      title.textContent = info.title;
+      summary.textContent = info.summary;
+      read.textContent = info.read;
+      points.innerHTML = "";
+      info.points.forEach(point => {
+        const li = document.createElement("li");
+        li.textContent = point;
+        points.appendChild(li);
+      });
+      nodes.forEach(item => item.classList.toggle("active", item === node));
+    }
+
+    function applyFilter(filter) {
+      document.body.classList.toggle("is-filtered", filter !== "all");
+      document.querySelectorAll(".tool-button").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
+      });
+      nodes.forEach(node => {
+        const tags = (node.dataset.tags || "").split(" ");
+        node.classList.toggle("dimmed", filter !== "all" && !tags.includes(filter));
+      });
+    }
+
+    nodes.forEach(node => {
+      node.addEventListener("click", () => showDetail(node));
+    });
+
+    document.querySelectorAll(".tool-button").forEach(button => {
+      button.addEventListener("click", () => applyFilter(button.dataset.filter));
+    });
+
+    showDetail(document.querySelector('[data-id="core-problem"]'));
+  </script>
+</body>
+</html>

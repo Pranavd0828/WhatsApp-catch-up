@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" role="img" aria-labelledby="title desc">
+  <title id="title">Ellie profile photo</title>
+  <desc id="desc">Illustrated female profile avatar for Ellie.</desc>
+  <defs>
+    <linearGradient id="bg" x1="18" y1="12" x2="134" y2="142" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f6d5c4"/>
+      <stop offset="1" stop-color="#e5f0ef"/>
+    </linearGradient>
+    <linearGradient id="hair" x1="44" y1="25" x2="108" y2="117" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4b3028"/>
+      <stop offset="1" stop-color="#201614"/>
+    </linearGradient>
+  </defs>
+  <rect width="150" height="150" rx="75" fill="url(#bg)"/>
+  <path d="M36 141c5-23 21-36 39-36s34 13 39 36H36Z" fill="#0f8f75"/>
+  <path d="M51 101c8 8 16 12 24 12s16-4 24-12v22c-6 6-14 9-24 9s-18-3-24-9v-22Z" fill="#d69a7d"/>
+  <path d="M42 72c-4-23 9-47 33-49 24-2 39 17 39 41 0 26-16 52-39 52S46 97 42 72Z" fill="url(#hair)"/>
+  <path d="M50 66c0-19 11-33 27-33s27 14 27 33c0 24-12 43-27 43S50 90 50 66Z" fill="#e5ad91"/>
+  <path d="M48 73c-5-5-10-2-9 5 1 8 6 13 12 12l-3-17Zm55 0c5-5 10-2 9 5-1 8-6 13-12 12l3-17Z" fill="#d69a7d"/>
+  <path d="M52 62c18-2 31-11 39-26 12 7 18 19 18 35 4-24-8-46-32-48-25-2-40 16-38 42 3-2 7-3 13-3Z" fill="url(#hair)"/>
+  <path d="M62 74c2-2 6-2 9 0m14 0c3-2 7-2 9 0" fill="none" stroke="#3a2a26" stroke-width="4" stroke-linecap="round"/>
+  <path d="M72 79c-1 6-4 11-8 15 6 5 15 6 23 0" fill="none" stroke="#b97463" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M67 95c5 4 13 4 18 0" fill="none" stroke="#8f423b" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="59" cy="84" r="7" fill="#e9a58a" opacity=".45"/>
+  <circle cx="94" cy="84" r="7" fill="#e9a58a" opacity=".45"/>
+</svg>
