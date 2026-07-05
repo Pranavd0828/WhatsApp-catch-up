@@ -486,6 +486,10 @@
         min-height: 28px;
       }
 
+      body.is-filtered .arrow-col {
+        display: none;
+      }
+
       .arrow-head-space {
         display: none;
       }
@@ -534,6 +538,22 @@
 
       .flow-step .arrow {
         justify-self: center;
+      }
+
+      .node.dimmed {
+        display: none;
+      }
+
+      .section:not(:has(.stack .node:not(.dimmed))) {
+        display: none;
+      }
+
+      .flow-step:has(.node.dimmed) {
+        display: none;
+      }
+
+      .flow-row:not(:has(.node:not(.dimmed))) {
+        display: none;
       }
 
       .detail-panel {
@@ -943,6 +963,7 @@
     }
 
     function applyFilter(filter) {
+      document.body.classList.toggle("is-filtered", filter !== "all");
       document.querySelectorAll(".tool-button").forEach(button => {
         button.setAttribute("aria-pressed", String(button.dataset.filter === filter));
       });
