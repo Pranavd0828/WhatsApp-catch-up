@@ -2,7 +2,7 @@ import React from 'react';
 import { AppState } from '../../types';
 import { MessageCircle, Settings, Users, CircleDashed, MessageSquareShare, Sparkles, type LucideIcon } from 'lucide-react';
 import clsx from 'clsx';
-import { publicAsset } from '../../utils/publicAsset';
+import { avatarAssets } from '../../utils/avatarAssets';
 
 interface NavigationRailProps {
   appState: AppState;
@@ -56,7 +56,7 @@ const NavigationRail: React.FC<NavigationRailProps> = ({ appState, setAppState }
       <div className="flex flex-col gap-2 w-full">
         <NavItem section="settings" icon={Settings} tooltip="Settings" />
         <button className="w-10 h-10 rounded-full overflow-hidden mx-auto mt-2 cursor-pointer">
-          <img src={publicAsset('avatars/me.svg')} alt="Profile" className="w-full h-full object-cover" />
+          <img src={avatarAssets.me} alt="Profile" className="w-full h-full object-cover" />
         </button>
       </div>
     </div>
