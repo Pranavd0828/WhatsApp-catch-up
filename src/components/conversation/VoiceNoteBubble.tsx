@@ -20,6 +20,11 @@ const formatDuration = (seconds: number) => {
   return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
+const getVoiceNoteAvatarUrl = (senderId: string) => {
+  if (senderId === 'ellie') return '/avatars/ellie.svg';
+  return `https://i.pravatar.cc/150?u=${senderId}`;
+};
+
 const VoiceNoteBubble: React.FC<VoiceNoteBubbleProps> = ({ appState, setAppState, voiceNote, isFirst, isLast, showAvatar, accumulatedStartSeconds }) => {
   const isOutgoing = voiceNote.direction === 'outgoing';
   
@@ -74,7 +79,7 @@ const VoiceNoteBubble: React.FC<VoiceNoteBubbleProps> = ({ appState, setAppState
     <div className={clsx("flex w-full mb-[2px]", isOutgoing ? "justify-end" : "justify-start", isLast ? "mb-2" : "")}>
       {showAvatar && !isOutgoing && (
         <div className="w-8 h-8 rounded-full overflow-hidden mr-2 mt-auto bg-[#dfe5e7] flex-shrink-0">
-          <img src={`https://i.pravatar.cc/150?u=${voiceNote.senderId}`} alt={voiceNote.senderName} />
+          <img src={getVoiceNoteAvatarUrl(voiceNote.senderId)} alt={voiceNote.senderName} />
         </div>
       )}
       {!showAvatar && !isOutgoing && <div className="w-10 flex-shrink-0" />}
@@ -146,7 +151,7 @@ const VoiceNoteBubble: React.FC<VoiceNoteBubbleProps> = ({ appState, setAppState
         {isOutgoing && (
           <div className="ml-3 flex flex-col justify-end">
              <div className="w-[34px] h-[34px] rounded-full overflow-hidden flex-shrink-0 bg-white">
-                <img src={`https://i.pravatar.cc/150?u=${voiceNote.senderId}`} alt={voiceNote.senderName} className="opacity-90" />
+                <img src={getVoiceNoteAvatarUrl(voiceNote.senderId)} alt={voiceNote.senderName} className="opacity-90" />
              </div>
           </div>
         )}

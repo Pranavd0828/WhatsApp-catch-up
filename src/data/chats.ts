@@ -12,7 +12,7 @@ export const mockChats: Chat[] = [
     isFavorite: true,
     hasCatchUp: true,
     catchUpStatus: 'ready',
-    avatarUrl: 'https://i.pravatar.cc/150?u=ellie',
+    avatarUrl: '/avatars/ellie.svg',
   },
   {
     id: 'chat-2',

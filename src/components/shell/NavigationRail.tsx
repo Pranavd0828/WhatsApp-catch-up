@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppState } from '../../types';
-import { MessageCircle, Settings, Users, CircleDashed, MessageSquareShare, Sparkles } from 'lucide-react';
+import { MessageCircle, Settings, Users, CircleDashed, MessageSquareShare, Sparkles, type LucideIcon } from 'lucide-react';
 import clsx from 'clsx';
 
 interface NavigationRailProps {
@@ -13,8 +13,9 @@ const NavigationRail: React.FC<NavigationRailProps> = ({ appState, setAppState }
     setAppState(prev => ({ ...prev, activeSection: section }));
   };
 
-  const NavItem = ({ section, icon: Icon, tooltip }: { section: AppState['activeSection'], icon: any, tooltip: string }) => {
+  const NavItem = ({ section, icon: Icon, tooltip }: { section: AppState['activeSection'], icon: LucideIcon, tooltip: string }) => {
     const isActive = appState.activeSection === section;
+    const isCatchUpActive = isActive && section === 'catch-up';
     return (
       <button 
         onClick={() => handleSelect(section)}
@@ -24,9 +25,16 @@ const NavigationRail: React.FC<NavigationRailProps> = ({ appState, setAppState }
         aria-label={tooltip}
         aria-current={isActive ? "page" : undefined}
       >
+        {isActive && (
+          <span className="absolute left-[-8px] top-1/2 h-7 w-1 -translate-y-1/2 rounded-r-full bg-[var(--color-wa-green)]" />
+        )}
         <div className={clsx(
-          "flex items-center justify-center w-10 h-10 rounded-full",
-          isActive ? "bg-[var(--bg-selected)] text-[var(--text-primary)]" : "text-[var(--text-secondary)]"
+          "flex items-center justify-center w-10 h-10 rounded-full transition-all",
+          isCatchUpActive
+            ? "bg-[rgba(0,168,132,0.16)] text-[var(--color-wa-green)] ring-2 ring-[var(--color-wa-green)] ring-offset-2 ring-offset-[var(--bg-panel-secondary)]"
+            : isActive
+              ? "bg-[var(--bg-selected)] text-[var(--text-primary)]"
+              : "text-[var(--text-secondary)]"
         )}>
           <Icon size={24} strokeWidth={isActive ? 2 : 1.5} />
         </div>
